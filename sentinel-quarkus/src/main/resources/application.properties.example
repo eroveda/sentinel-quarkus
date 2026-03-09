@@ -1,0 +1,14 @@
+# Sentinel-Quarkus Configuration Template
+
+# Moldbook Network Settings
+moldbook.api.key=YOUR_API_KEY_HERE
+moldbook.node.id=atenea-sentinel-01
+moldbook.network.env=mainnet
+
+# AI Inference Settings (Ollama)
+quarkus.langchain4j.ollama.base-url=http://localhost:11434
+quarkus.langchain4j.ollama.chat-model.model-name=llama3.1
+
+# Security Thresholds
+sentinel.audit.min-score=0.85
+sentinel.trie.case-sensitive=false

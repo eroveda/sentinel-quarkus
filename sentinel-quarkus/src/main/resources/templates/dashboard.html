@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinel AI Dashboard</title>
+    <style>
+        body { background: #0a0a0a; color: #00ff00; font-family: 'Courier New', monospace; padding: 20px; line-height: 1.2; }
+        .card { border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-left: 5px solid #00ff00; background: #111; }
+        .critical { border-left-color: #ff0000; color: #ff6666; }
+        .stats { display: flex; gap: 20px; margin-bottom: 20px; }
+        .stat-box { background: #151515; padding: 15px; border: 1px solid #333; flex: 1; text-align: center; box-shadow: inset 0 0 10px #000; }
+        .money-box { border: 1px solid #ffcc00; color: #ffcc00; }
+        h1 { border-bottom: 2px solid #00ff00; padding-bottom: 10px; letter-spacing: 2px; }
+        .glitch { animation: flash 0.5s; }
+        @keyframes flash {  0% { color: #fff; text-shadow: 0 0 10px #fff; }  50% { color: #ffcc00; text-shadow: 0 0 20px #ffcc00; } 100% { color: #ffcc00; } }
+    </style>
+</head>
+<body>
+    <h1>🛰️ SENTINEL AUDITOR - WEB 4.0</h1>
+
+    <div class="stats">
+        <div class="stat-box">
+            <h3>CPU FILTERS (Trie)</h3>
+            <p style="font-size: 2em;">{cpuBlocks}</p>
+        </div>
+        <div class="stat-box">
+            <h3>GPU INFERENCE</h3>
+            <p style="font-size: 2em; color: #00d4ff;">{gpuChecks}</p>
+        </div>
+        <div class="stat-box money-box">
+            <h3>NODE REVENUE</h3>
+            <p id="molds-display" style="font-size: 2.2em; margin: 10px 0;">{initialBalance}</p>
+            <small>MLDS (RTX 3060)</small>
+        </div>
+    </div>
+
+    <h2>Recents Logs:</h2>
+    <div id="logs-container">
+        {#for log in logs}
+        <div class="card {#if log.risk == 'CRITICAL'}critical{/if}">
+            <strong>[{log.engine}]</strong> - Risk: {log.risk} | Score: {log.score}<br>
+            <small>Reason: {log.reason}</small>
+        </div>
+        {/for}
+    </div>
+
+    <script>
+        let lastValue = {initialBalance};
+        
+        async function refreshWallet() {
+            try {
+                const response = await fetch('/wallet/balance');
+                if (response.status === 403) return; // Silent fail si no es localhost
+                
+                const data = await response.json();
+                const display = document.getElementById('molds-display');
+                
+                if (data.amount > lastValue) {
+                    display.classList.add('glitch');
+                    setTimeout(() => display.classList.remove('glitch'), 600);
+                }
+                
+                display.innerText = data.amount.toFixed(4);
+                lastValue = data.amount;
+            } catch (e) {
+                console.log("Acceso privado al Wallet.");
+            }
+        }
+
+        // Refresco cada 1.5 segundos para no saturar
+        setInterval(refreshWallet, 1500);
+    </script>
+</body>
+</html>
+<div class="stat-box money-box">
+    <h3>NODE REVENUE</h3>
+    <p id="molds-display" style="font-size: 2.2em; margin: 10px 0;">{initialBalance}</p>
+    <button onclick="settleMolds()" style="background:#ffcc00; color:#000; border:none; cursor:pointer; padding:5px 10px; font-weight:bold;">
+        SIMULATE CASH OUT
+    </button>
+</div>
+
+<script>
+async function settleMolds() {
+    if(!confirm("¿Simular envío de ganancias a Solana?")) return;
+    const res = await fetch('/wallet/settle', { method: 'POST' });
+    const data = await res.json();
+    alert("Simulación exitosa: Se habrían enviado " + data.amount + " MLDS");
+    document.getElementById('molds-display').innerText = "0.0000";
+}
+</script>

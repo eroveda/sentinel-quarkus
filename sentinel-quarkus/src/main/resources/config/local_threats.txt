@@ -1,0 +1,13 @@
+# Sentinel Local Threat Patterns
+# Jailbreak attempts
+jailbreak
+prompt injection
+ignore previous instructions
+system override
+# Malicious intent
+malware
+exploit
+backdoor
+# Web 4.0 specifics
+bypass moldbook
+wallet drain

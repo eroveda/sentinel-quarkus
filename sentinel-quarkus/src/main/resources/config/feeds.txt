@@ -1,0 +1,7 @@
+# External Feeds (Commented out until you have API-KEY)
+# https://raw.githubusercontent.com/sentinel/feeds/main/blacklist.txt
+
+# Local Testing Feed
+# Nota: Para el testeo inicial, el ThreatFeedManager puede leer esto 
+# si agregamos el soporte para archivos locales o usamos un Gist propio.
+https://gist.githubusercontent.com/raw/mock-local-threats
